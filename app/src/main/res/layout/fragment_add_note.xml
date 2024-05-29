@@ -1,9 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#3BA8B6"
     tools:context=".AddNoteFragment">
 
 
-</FrameLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
+
+        <EditText
+            android:id="@+id/notes_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="What do on your Mind...?"
+            android:background="@drawable/et_shape"
+            android:textColor="@color/black"
+            android:textColorHint="#645C5C"
+            android:textSize="18sp"
+            android:padding="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/datePickerBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#7A50C5"
+            android:text="Pick A Date"
+            android:drawableEnd="@drawable/baseline_calendar_month_24"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:padding="12dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@id/notes_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/timePickerBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#7A50C5"
+            android:text="Pick A Time"
+            android:drawableEnd="@drawable/baseline_access_time_24"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:padding="12dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@id/datePickerBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+</LinearLayout>
