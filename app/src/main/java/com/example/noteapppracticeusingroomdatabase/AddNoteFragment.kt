@@ -12,6 +12,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.room.Room
 import com.example.noteapppracticeusingroomdatabase.databinding.FragmentAddNoteBinding
 import java.util.Calendar
 import kotlin.math.min
@@ -21,13 +22,22 @@ class AddNoteFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     lateinit var binding: FragmentAddNoteBinding
 
+    lateinit var database: NoteDatabase
+
     var priorityList = listOf("select Priority", "High", "Medium", "low")
+
+    private var timePicker: String? = null
+    private var datePicker: String? = null
+    private var priority: String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAddNoteBinding.inflate(layoutInflater, container, false)
 
+        database = Room.databaseBuilder(requireActivity(),
+            NoteDatabase::class.java, "Note-DB")
+            .allowMainThreadQueries().build()
 
         var spinnerAdapter = ArrayAdapter(
             requireContext(),
@@ -36,6 +46,8 @@ class AddNoteFragment : Fragment(), AdapterView.OnItemSelectedListener {
         )
 
         binding.priorityMenu.adapter = spinnerAdapter
+
+        binding.priorityMenu.onItemSelectedListener = this@AddNoteFragment
 
         binding.datePickerBtn.setOnClickListener {
 
@@ -46,6 +58,19 @@ class AddNoteFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding.timePickerBtn.setOnClickListener {
 
             pickATime()
+
+        }
+        binding.submitBtn.setOnClickListener {
+            var titleStr = binding.notesTitle.text.toString()
+            var timeStr = timePicker ?: "00:00"
+            var dateStr = datePicker ?: "0/0/00"
+            var priorityStr = priority ?: "Low"
+
+
+            val note = Note(title = titleStr, time = timeStr, date = dateStr, priority = priorityStr)
+
+            database.getNoteDao().insertNote(note)
+
 
         }
 
@@ -64,8 +89,8 @@ class AddNoteFragment : Fragment(), AdapterView.OnItemSelectedListener {
             { _, hourOfDay, minute ->
 
 
-                var time = "$hourOfDay : $minute"
-                binding.timePickerBtn.text = time
+                timePicker = "$hourOfDay : $minute"
+                binding.timePickerBtn.text = timePicker
 
             }, hour, Minute, false
         )
@@ -86,9 +111,9 @@ class AddNoteFragment : Fragment(), AdapterView.OnItemSelectedListener {
             requireActivity(),
             { _, year, month, dayOfMonth ->
 
-                var selectedDate = "$dayOfMonth/$month/$year"
+                datePicker = "$dayOfMonth/$month/$year"
 
-                binding.datePickerBtn.text = selectedDate
+                binding.datePickerBtn.text = datePicker
             },
 
             year, month, date
@@ -99,7 +124,10 @@ class AddNoteFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        Toast.makeText(requireContext(), "$position[$priorityList]", Toast.LENGTH_SHORT).show()
+
+        priority = priorityList[position]
+
+        Toast.makeText(requireContext(), "$priority", Toast.LENGTH_SHORT).show()
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {

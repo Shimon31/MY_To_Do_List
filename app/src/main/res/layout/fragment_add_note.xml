@@ -68,6 +68,16 @@
             app:layout_constraintTop_toBottomOf="@id/timePickerBtn"
             android:layout_marginTop="10dp"/>
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/submitBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            app:layout_constraintTop_toBottomOf="@id/priorityMenu"
+            android:layout_marginTop="10dp"
+            android:background="#7A50C5"
+            android:textColor="@color/white"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
