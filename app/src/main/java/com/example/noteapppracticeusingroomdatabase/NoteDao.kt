@@ -11,6 +11,7 @@ interface NoteDao {
 
     @Insert
     fun insertNote(note: Note)
+
     @Update
     fun update(note: Note)
 
@@ -18,5 +19,10 @@ interface NoteDao {
     fun delete(note: Note)
 
     @Query("SELECT * FROM Note")
-    fun getAllNote() :List<Note>
+    fun getAllNote(): List<Note>
+
+    @Query("SELECT * FROM Note WHERE noteId IN (:id)")
+    fun getNoteById(id: List<Int>): List<Note>
+
+
 }

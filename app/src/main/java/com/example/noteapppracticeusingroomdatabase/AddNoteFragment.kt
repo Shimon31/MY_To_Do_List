@@ -2,7 +2,6 @@ package com.example.noteapppracticeusingroomdatabase
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.health.connect.datatypes.units.Length
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,34 +9,55 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.TimePicker
 import android.widget.Toast
-import androidx.room.Room
 import com.example.noteapppracticeusingroomdatabase.databinding.FragmentAddNoteBinding
 import java.util.Calendar
-import kotlin.math.min
 
 
 class AddNoteFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     lateinit var binding: FragmentAddNoteBinding
 
-    lateinit var database: NoteDatabase
-
     var priorityList = listOf("select Priority", "High", "Medium", "low")
 
     private var timePicker: String? = null
     private var datePicker: String? = null
     private var priority: String? = null
+
+    lateinit var note: Note
+
+    private var noteId = 0
+
+
+    companion object {
+
+        var Note_ID = "note_Id"
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAddNoteBinding.inflate(layoutInflater, container, false)
 
-        database = Room.databaseBuilder(requireActivity(),
-            NoteDatabase::class.java, "Note-DB")
-            .allowMainThreadQueries().build()
+        noteId = requireArguments().getInt(Note_ID)
+
+        if (noteId != 0) {
+            note =
+                NoteDatabase.getDB(requireContext()).getNoteDao()
+                    .getNoteById(listOf<Int>(noteId))[0]
+
+            binding.apply {
+
+                notesTitle.setText(note.title)
+                timePickerBtn.text = note.time
+                datePickerBtn.text = note.date
+            }
+
+
+        }
+
 
         var spinnerAdapter = ArrayAdapter(
             requireContext(),
@@ -67,9 +87,16 @@ class AddNoteFragment : Fragment(), AdapterView.OnItemSelectedListener {
             var priorityStr = priority ?: "Low"
 
 
-            val note = Note(title = titleStr, time = timeStr, date = dateStr, priority = priorityStr)
+            note =
+                Note(title = titleStr, time = timeStr, date = dateStr, priority = priorityStr)
 
-            database.getNoteDao().insertNote(note)
+            if (noteId == 0) {
+
+                NoteDatabase.getDB(requireContext()).getNoteDao().insertNote(note)
+            }else{
+                note.noteId = noteId
+                NoteDatabase.getDB(requireContext()).getNoteDao().update(note)
+            }
 
 
         }
