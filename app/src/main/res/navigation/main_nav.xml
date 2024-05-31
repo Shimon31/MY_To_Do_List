@@ -18,5 +18,9 @@
         android:id="@+id/addNoteFragment"
         android:name="com.example.noteapppracticeusingroomdatabase.AddNoteFragment"
         android:label="fragment_add_note"
-        tools:layout="@layout/fragment_add_note" />
+        tools:layout="@layout/fragment_add_note" >
+        <action
+            android:id="@+id/action_addNoteFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>

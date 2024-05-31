@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.noteapppracticeusingroomdatabase.databinding.FragmentAddNoteBinding
 import java.util.Calendar
 
@@ -69,6 +70,7 @@ class AddNoteFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         binding.priorityMenu.onItemSelectedListener = this@AddNoteFragment
 
+
         binding.datePickerBtn.setOnClickListener {
 
             pickADate()
@@ -81,10 +83,12 @@ class AddNoteFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         }
         binding.submitBtn.setOnClickListener {
-            var titleStr = binding.notesTitle.text.toString()
-            var timeStr = timePicker ?: "00:00"
-            var dateStr = datePicker ?: "0/0/00"
-            var priorityStr = priority ?: "Low"
+            val titleStr = binding.notesTitle.text.toString()
+            val timeStr = timePicker ?: "00:00"
+            val dateStr = datePicker ?: "0/0/00"
+            val priorityStr = priority ?: "Low"
+
+            findNavController().navigate(R.id.action_addNoteFragment_to_homeFragment)
 
 
             note =

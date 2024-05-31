@@ -38,7 +38,10 @@ class HomeFragment : Fragment(),NoteAdapter.NoteEditListener,NoteAdapter.NoteDel
 
         binding.addNote.setOnClickListener {
 
-            findNavController().navigate(R.id.action_homeFragment_to_addNoteFragment)
+            val bundle = Bundle()
+            bundle.putInt(AddNoteFragment.Note_ID,0)
+
+            findNavController().navigate(R.id.action_homeFragment_to_addNoteFragment,bundle)
 
         }
 
@@ -52,11 +55,25 @@ class HomeFragment : Fragment(),NoteAdapter.NoteEditListener,NoteAdapter.NoteDel
         val bundle = Bundle()
         bundle.putInt(AddNoteFragment.Note_ID,note.noteId)
 
-        findNavController().navigate(R.id.action_homeFragment_to_addNoteFragment,bundle)
+        findNavController().navigate(R.id.action_homeFragment_to_addNoteFragment,bundle
+        )
     }
 
     override fun onNoteDelete(note: Note) {
-        TODO("Not yet implemented")
+
+        val noteDao = NoteDatabase.getDB(requireContext()).getNoteDao()
+
+        // Delete the note in a background thread
+        Thread {
+            noteDao.delete(note)
+            // Refresh the notes list on the main thread
+            requireActivity().runOnUiThread {
+                val updatedNotes = noteDao.getAllNote()
+                (binding.recyclerView.adapter as NoteAdapter).submitList(updatedNotes)
+                Toast.makeText(requireContext(), "Note deleted", Toast.LENGTH_SHORT).show()
+            }
+        }.start()
+
     }
 
 }

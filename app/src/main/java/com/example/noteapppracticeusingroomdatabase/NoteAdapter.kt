@@ -2,6 +2,7 @@ package com.example.noteapppracticeusingroomdatabase
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -54,6 +55,36 @@ class NoteAdapter(
         getItem(position).let {
 
             holder.binding.apply {
+
+                when (it.priority) {
+                    "High" -> {
+                        cLayout.setBackgroundColor(
+                            ContextCompat.getColor(
+                                this.root.context,
+                                R.color.red
+                            )
+                        )
+                    }
+
+                    "Medium" -> {
+                        cLayout.setBackgroundColor(
+                            ContextCompat.getColor(
+                                this.root.context,
+                                R.color.blue
+                            )
+                        )
+                    }
+
+                    else -> {
+                        cLayout.setBackgroundColor(
+                            ContextCompat.getColor(
+                                this.root.context,
+                                R.color.green
+                            )
+                        )
+                    }
+                }
+
 
                 notesTitle.text = it.title
                 notesTime.text = it.time
